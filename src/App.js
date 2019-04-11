@@ -124,7 +124,13 @@ class App extends Component {
   addNewCommand(e) {
     const commandList = this.state.commandList;
     this.setState({
-      commandList: commandList.concat(<Command addingStatesFunc={this.addingStatesFunc} commandNumber={commandList.length} key={commandList.length} />)
+      commandList: commandList.concat(
+        <Command
+          addingStatesFunc={this.addingStatesFunc}
+          commandNumber={commandList.length}
+          key={commandList.length}
+        />
+      )
     })
   }
 
