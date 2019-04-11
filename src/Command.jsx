@@ -22,9 +22,10 @@ class Command extends Component {
 
     }
 
-    submit() {
-        console.log(this.state);
+    submit(e) {
+        //console.log(this.state);
         this.props.addingStatesFunc(this.state)
+        e.target.disabled=true
     }
 
     updateCommandLabel(e) {
@@ -82,8 +83,7 @@ class Command extends Component {
                         className="adress">
                     </input>
                 </label>
-                <button onClick={this.submit}>Print</button>
-
+                <button onClick={e => this.submit(e)}>Print</button>
             </div>
         )
     }

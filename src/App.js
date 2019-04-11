@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Command from './Command'
 
+let rejestr = []
+
 class App extends Component {
   constructor() {
     super()
@@ -19,70 +21,83 @@ class App extends Component {
   }
 
 
+
   solution() {
-    let rejestr = []
-    for(let i=0; i<this.state.status.length; i++) {
-      if(this.state.status[i].commandName[this.state.status.length].upperCase !== "HALT") {
-        alert("Jako ostaatania msui być podana okmenda HALT!")
-        return 0
-      }
-      if(this.state.status[i].commandName.upperCase === "LOAD") {
-        rejestr[0] = parseInt(this.state.var)
+
+    //alert("LOAD")
+    const stats = this.state.status
+    let i
+    for(i=0; i<stats.length; i++) {
+      let name = stats[i].commandName.toUpperCase()
+      // if(name[this.state.status.length-1].toUpperCase() !== "HALT") {
+      //   alert("Jako ostatania msui być podana komenda HALT!")
+      //   return 0
+      // }
+      if(name === "LOAD") {
+        rejestr[0] = this.state.var
+        alert("LOAD")
         continue
       }
-      if(this.state.status[i].commandName.upperCase === "STORE") {
-        if(this.state.status[i].commandAdress[0] === '*') {
+      if(name === "STORE") {
+        if(stats[i].commandAdress[0] === '*') {
           rejestr[this.state.status[i].commandAdress] = rejestr[rejestr[0]]
         } else {
           rejestr[this.state.status[i].commandAdress] = rejestr[0]
         }
         continue
       }
-      if(this.state.status[i].commandName.upperCase === "ADD") {
+      if(name === "ADD") {
         rejestr[0] += parseInt(this.state.var)
+        continue
       }
-      if(this.state.status[i].commandName.upperCase === "SUB") {
+      if(name === "SUB") {
         rejestr[0] -= parseInt(this.state.var)
+        continue
       }
-      if(this.state.status[i].commandName.upperCase === "MULT") {
+      if(name === "MULT") {
         rejestr[0] *= parseInt(this.state.var)
+        continue
       }
-      if(this.state.status[i].commandName.upperCase === "DIV") {
+      if(name === "DIV") {
         rejestr[0] = Math.floor(rejestr[0] / parseInt(this.state.var))
+        continue
       }
-      if(this.state.status[i].commandName.upperCase === "READ") {
+      if(name === "READ") {
         alert("Komenda READ nie jest obsługiwana w tej wersji programu")
+        continue
       }
-      if(this.state.status[i].commandName.upperCase === "WRITE") {
+      if(name === "WRITE") {
         if(this.status.var === 0) {
           return 0
         }
         continue
       }
-      if(this.state.status[i].commandName.upperCase === "JUMP") {
-        for(let j=0; j<this.state.status.length; j++) {
-          if(this.state.status[j].commandLabel === this.state.status[i].commandAdress) i = j - 1
+       if(name === "JUMP") {
+        for(let j=0; j<stats.length; j++) {
+          if(stats[j].commandLabel === stats[i].commandAdress) i = j - 1
         }
         continue
       }
-      if(this.state.status[i].commandName.upperCase === "JGTZ") {
+      if(name === "JGTZ") {
         if(rejestr[0] > 0 ) {
-          for(let j=0; j<this.state.status.length; j++) {
-            if(this.state.status[j].commandLabel === this.state.status[i].commandAdress) i = j - 1
+          for(let j=0; j<stats.length; j++) {
+            if(stats[j].commandLabel === stats[i].commandAdress) i = j - 1
           }
         }
-        continue
+          continue
       }
-      if(this.state.status[i].commandName.upperCase === "JZERO") {
+      if(name === "JZERO") {
         if(rejestr[0] === 0 ) {
-          for(let j=0; j<this.state.status.length; j++) {
-            if(this.state.status[j].commandLabel === this.state.status[i].commandAdress) i = j - 1
+          for(let j=0; j<stats.length; j++) {
+            if(stats[j].commandLabel === stats[i].commandAdress) i = j - 1
           }
         }
         continue
       }
-      if(this.state.status[i].commandName.upperCase === "HALT") {
-        return rejestr[0]
+      if(name === "HALT") {
+        this.setState({
+          sol: rejestr[0]
+        })
       }
     }
   }
@@ -95,10 +110,15 @@ class App extends Component {
 
   addingStatesFunc(data) {
     this.state.status.push(data)
+    console.log(this.state.status);
   }
 
   getSolution() {
-    console.log(this.state);
+    //console.log(this.state);
+    this.setState({
+      sol: this.solution()
+    })
+
   }
 
   addNewCommand(e) {
@@ -121,8 +141,10 @@ class App extends Component {
         </label>
         {this.state.commandList.map((input, index) => {return input})}
         <button onClick={this.addNewCommand}>Dodaj komendę</button>
-        <button onClick={this.getSolution}>Podaj wynik</button>
+        <button onClick={this.solution}>Podaj wynik</button>
         <p>Wynik: {this.state.sol}</p>
+        <p>{rejestr.map((input, index) => {return `rejestr numer ${index}: ${input}.`})}</p>
+
       </div>
     );
   }
