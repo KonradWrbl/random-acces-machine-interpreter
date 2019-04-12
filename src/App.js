@@ -34,7 +34,7 @@ class App extends Component {
       //   return 0
       // }
       if(name === "LOAD") {
-        rejestr[0] = this.state.var
+        rejestr[0] = rejestr[stats[i].commandAdress]
         alert("LOAD")
         continue
       }
@@ -63,6 +63,7 @@ class App extends Component {
         continue
       }
       if(name === "READ") {
+        rejestr[this.state.status[i].commandAdress] = this.state.var
         alert("Komenda READ nie jest obsługiwana w tej wersji programu")
         continue
       }
